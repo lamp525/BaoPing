@@ -23,7 +23,7 @@ public class Startup {
 			// 初始化讯飞语音合成SDK
 			SpeechUtility.createUtility(SpeechConstant.APPID + "=" + MY_APPID);
 			Speech s = new Speech();
-			s.play("定时任务管理器实例");	
+			s.play("语音合成播放测试");	
 		} catch (Exception e) {
 			Log.error("主程序异常！", e);
 		}
