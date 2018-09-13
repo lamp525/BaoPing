@@ -1,1 +1,9 @@
+##ignore this file##
+/target/ 
 /bin/
+/log/
+/msc/
+
+.classpath
+.project
+.settings 
