@@ -1,16 +1,12 @@
 ##ignore this file##
 
 /target/ 
-
 /bin/
-
 /log/
-
 /msc/
+/.settings/
 
 
 .classpath
-
 .project
-
 .settings 

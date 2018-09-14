@@ -33,7 +33,7 @@ public class Startup {
 						while (true) {
 							weekDay = DateHelper.getWeekDayByCurrentTime();
 							// 周末停止任务
-							if (weekDay == 6 || weekDay == 1) {
+							if (weekDay == 7 || weekDay == 1) {
 								if (!tm.isTimerTaskStopped())
 									tm.stopTimerTask();
 								// 工作日开始任务
@@ -41,6 +41,8 @@ public class Startup {
 								if (tm.isTimerTaskStopped())
 									tm.startTimerTask();
 							}
+							// 工作线程休眠4小时
+							threadSleep(4 * 60 * 60);
 						}
 					} catch (Exception e) {
 						Log.error("工作线程异常！", e);
@@ -51,6 +53,17 @@ public class Startup {
 		} catch (Exception e) {
 			Log.error("主程序异常！", e);
 		}
+	}
+
+	/**
+	 * @description: 线程休眠
+	 * @param period
+	 * @throws InterruptedException
+	 */
+	private static void threadSleep(long period) throws InterruptedException {
+		Log.info("当前线程将休眠：" + String.valueOf(period) + "秒！");
+		Thread.sleep(period * 1000);
+		Log.info("当前线程继续执行！");
 	}
 
 }

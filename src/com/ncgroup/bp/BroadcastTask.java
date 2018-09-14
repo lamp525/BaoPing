@@ -169,8 +169,10 @@ public class BroadcastTask extends TimerTask {
 
 				String amountStatus = amountRate.doubleValue() >= 0 ? "金额增量百分之" : "金额缩量百分之";
 				String accAmountStatus = accAmountRate.doubleValue() >= 0 ? "累计金额增量百分之" : "累计金额缩量百分之";
-				String content = "5分钟" + amountStatus + amountRate.abs().toString() + COMMA + accAmountStatus
-						+ accAmountRate.abs().toString() + PERIOD;
+				String content = "5分钟" + amountStatus + amountRate.abs().toString() + COMMA;
+				if (!time.equals("09:35")) {
+					content += accAmountStatus + accAmountRate.abs().toString() + PERIOD;
+				}
 				if (indexCode.equals("SZ")) {
 					contentSZ = "上证" + content;
 				} else if (indexCode.equals("ZX")) {
