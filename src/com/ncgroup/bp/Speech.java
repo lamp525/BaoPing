@@ -10,7 +10,7 @@ public class Speech {
 	private static SpeechSynthesizer _ss = null;
 
 	/**
-	 * @Description: 实例化
+	 * @description: 实例化
 	 */
 	public Speech() {
 		getInstance();
