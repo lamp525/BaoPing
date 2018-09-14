@@ -23,8 +23,7 @@ public class Speech {
 	}
 
 	/**
-	 * 播放文本
-	 * 
+	 * @description: 播放文本
 	 * @param content
 	 */
 	public void play(String content) {
@@ -46,7 +45,8 @@ public class Speech {
 	}
 
 	/**
-	 * 获取对象
+	 * @description: 获取对象
+	 *
 	 */
 	private void getInstance() {
 		if (_ss == null) {
@@ -65,7 +65,7 @@ public class Speech {
 	}
 
 	/**
-	 * 语音合成
+	 * @description: 语音合成
 	 * 
 	 */
 	private void synthesis(String content) {
@@ -73,10 +73,10 @@ public class Speech {
 		getInstance();
 
 		// 开始合成语音播报
-		_ss.startSpeaking(content, mSynListener);
+		_ss.startSpeaking(content, _synListener);
 	}
 
-	private static SynthesizerListener mSynListener = new SynthesizerListener() {
+	private static SynthesizerListener _synListener = new SynthesizerListener() {
 
 		@Override
 		public void onBufferProgress(int arg0, int arg1, int arg2, String arg3) {
