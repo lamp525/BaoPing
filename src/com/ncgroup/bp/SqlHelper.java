@@ -4,9 +4,10 @@ import java.sql.*;
 import java.util.logging.*;
 
 /**
- * SQL 基本操作 通过它,可以很轻松的使用 JDBC 来操纵数据库
- * 
- * @author Null
+ * @description: SQL 基本操作 通过它,可以很轻松的使用 JDBC 来操纵数据库
+ * @author: Lin
+ * @created: 2018年9月13日 下午4:50:17
+ * @version: 1.0
  */
 public class SqlHelper {
 

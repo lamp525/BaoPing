@@ -4,15 +4,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
- * @Description: 播报数据处理、获取
+ * @description: 播报数据处理、获取
  * @author: Lin
- * @version:
- * @date: 2018年9月12日 下午4:37:57
+ * @created: 2018年9月13日 下午4:46:01
+ * @version: 1.0
  */
 public class DataSource {
 	private static int _count1M = 0;
 	private static int _count5M = 0;
-	
+
 	/**
 	 * 5分钟数据处理
 	 */
@@ -59,7 +59,7 @@ public class DataSource {
 		Boolean result = false;
 
 		int count = getResultCount5M();
-		if (count > _count5M) {
+		if (count > _count5M && count % 3 == 0) {
 			result = true;
 			_count5M = count;
 		}
@@ -143,8 +143,18 @@ public class DataSource {
 
 		try {
 			String today = DateHelper.now("yyyy-MM-dd");
-			String sql = "SELECT COUNT(1) FROM [dbo].[BP_5MResult_SZ] Where [日期] = '" + today + "'";
-			Object obj = SqlHelper.ExecScalar(sql);
+			StringBuilder sb = new StringBuilder();
+			sb.append(" SELECT SUM(aa) FROM( ");
+			sb.append(" SELECT aa = COUNT(1)  FROM [FinancialCenter].[dbo].[BP_5MResult_SZ] Where [日期] =");
+			sb.append("'" + today + "' ");
+			sb.append(" UNION ALL");
+			sb.append(" SELECT aa = COUNT(1)  FROM [FinancialCenter].[dbo].[BP_5MResult_ZX] Where [日期] =");
+			sb.append("'" + today + "' ");
+			sb.append(" UNION ALL ");
+			sb.append(" SELECT aa = COUNT(1)  FROM [FinancialCenter].[dbo].[BP_5MResult_CY] Where [日期] =");
+			sb.append("'" + today + "' ");
+			sb.append(" ) T");
+			Object obj = SqlHelper.ExecScalar(sb.toString());
 			if (obj != null) {
 				count = Integer.parseUnsignedInt(obj.toString());
 			}
@@ -154,7 +164,5 @@ public class DataSource {
 
 		return count;
 	}
-
-
 
 }

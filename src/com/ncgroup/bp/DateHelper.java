@@ -4,13 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * @description: 日期处理类
+ * @author: Lin
+ * @created: 2018年9月13日 下午4:45:11
+ * @version: 1.0
+ */
 public class DateHelper {
 
 	/**
-	 * 格式化时间
-	 * 
+	 * @description: 格式化时间
 	 * @param date
-	 * @param pattern "yyyy-MM-dd HH:mm:ss"
+	 * @param pattern
 	 * @return
 	 */
 	public static String getFormatTime(Date date, String pattern) {

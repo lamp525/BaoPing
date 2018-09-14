@@ -4,15 +4,15 @@ import java.util.Date;
 import java.util.TimerTask;
 
 /**
- * @Description: 数据处理任务
+ * @description: 数据处理任务
  * @author: Lin
- * @version:
- * @date: 2018年9月12日 下午4:42:22
+ * @created: 2018年9月13日 下午3:18:24
+ * @version: 1.0
  */
 public class DataProcTask extends TimerTask {
 
 	/**
-	 * 数据处理入口
+	 * 启动数据处理任务
 	 */
 	@Override
 	public void run() {

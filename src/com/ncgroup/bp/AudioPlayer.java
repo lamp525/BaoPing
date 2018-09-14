@@ -5,6 +5,12 @@ import java.io.InputStream;
 
 import javazoom.jl.player.Player;
 
+/**
+ * @description: 音频播放类
+ * @author: Lin
+ * @created: 2018年9月13日 下午4:46:27
+ * @version: 1.0
+ */
 public class AudioPlayer {
 
 	private static Player _player;

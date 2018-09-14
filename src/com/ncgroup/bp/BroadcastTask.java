@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.TimerTask;
 
 /**
- * @Description: 数据播报任务
+ * @description: 数据播报任务
  * @author: Lin
- * @version:
- * @date: 2018年9月12日 下午4:42:54
+ * @created: 2018年9月13日 下午4:43:14
+ * @version: 1.0
  */
 public class BroadcastTask extends TimerTask {
 	private Speech _speech = new Speech();
@@ -19,7 +19,7 @@ public class BroadcastTask extends TimerTask {
 	private String _lastTime = "";
 
 	/**
-	 * @Description:
+	 * 启动播报任务
 	 */
 	@Override
 	public void run() {
@@ -39,7 +39,7 @@ public class BroadcastTask extends TimerTask {
 			}
 
 			// 5分钟数据播报
-			if ((iTime >= 935 && iTime < 1132) || (iTime >= 1305 && iTime < 11503)) {
+			if ((iTime >= 935 && iTime < 1132) || (iTime >= 1305 && iTime < 1503)) {
 				if (DataSource.checkUpdate5M())
 					tradeRemind5M();
 			}

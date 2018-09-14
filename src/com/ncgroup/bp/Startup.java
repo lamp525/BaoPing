@@ -4,10 +4,10 @@ import com.iflytek.cloud.speech.SpeechConstant;
 import com.iflytek.cloud.speech.SpeechUtility;
 
 /**
- * @Description: 启动程序
+ * @description: 启动程序
  * @author: Lin
- * @version:
- * @date: 2018年9月12日 下午4:14:16
+ * @created: 2018年9月13日 下午4:44:28
+ * @version: 1.0
  */
 public class Startup {
 	private static final String MY_APPID = "5b8508fa";
@@ -22,8 +22,6 @@ public class Startup {
 
 			// 初始化讯飞语音合成SDK
 			SpeechUtility.createUtility(SpeechConstant.APPID + "=" + MY_APPID);
-			Speech s = new Speech();
-			s.play("语音合成播放测试");	
 
 			new Thread(new Runnable() {
 				@Override
