@@ -42,7 +42,7 @@ public class Startup {
 									tm.startTimerTask();
 							}
 							// 工作线程休眠4小时
-							threadSleep(4 * 60 * 60);
+							ThreadUtil.threadSleep(4 * 60 * 60 * 1000);
 						}
 					} catch (Exception e) {
 						Log.error("工作线程异常！", e);
@@ -53,17 +53,6 @@ public class Startup {
 		} catch (Exception e) {
 			Log.error("主程序异常！", e);
 		}
-	}
-
-	/**
-	 * @description: 线程休眠
-	 * @param period
-	 * @throws InterruptedException
-	 */
-	private static void threadSleep(long period) throws InterruptedException {
-		Log.info("当前线程将休眠：" + String.valueOf(period) + "秒！");
-		Thread.sleep(period * 1000);
-		Log.info("当前线程继续执行！");
 	}
 
 }

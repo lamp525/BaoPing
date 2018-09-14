@@ -5,37 +5,27 @@ import com.iflytek.cloud.speech.SpeechError;
 import com.iflytek.cloud.speech.SpeechSynthesizer;
 import com.iflytek.cloud.speech.SynthesizerListener;
 
-/**
- * @description: 科大讯飞语音在线合成
- * @author: Lin
- * @created: 2018年9月13日 下午4:47:20
- * @version: 1.0
- */
 public class Speech {
 
 	private static SpeechSynthesizer _ss = null;
 
 	/**
-	 * @description: 禁止实例化
-	 *
+	 * @Description: 实例化
 	 */
 	public Speech() {
 		getInstance();
 	}
 
 	/**
-	 * @description: 播放文本
+	 * 播放文本
+	 * 
 	 * @param content
 	 */
 	public void play(String content) {
 		try {
 			getInstance();
 			while (_ss.isSpeaking()) {
-				try {
-					Thread.sleep(3 * 1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				ThreadUtil.threadSleep(3 * 1000);
 			}
 			Log.info(content);
 
@@ -50,8 +40,7 @@ public class Speech {
 	}
 
 	/**
-	 * @description: 获取对象
-	 *
+	 * 获取对象
 	 */
 	private void getInstance() {
 		if (_ss == null) {
@@ -70,8 +59,8 @@ public class Speech {
 	}
 
 	/**
-	 * @description: 语音合成
-	 * @param content
+	 * 语音合成
+	 * 
 	 */
 	private void synthesis(String content) {
 		// 获取SpeechSynthesizer对象
