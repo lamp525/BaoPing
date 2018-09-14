@@ -13,8 +13,7 @@ public class ThreadUtil {
 	 * @description: ½ûÖ¹ÊµÀý»¯
 	 * 
 	 */
-	private ThreadUtil() {
-		// TODO Auto-generated constructor stub
+	private ThreadUtil() {		
 	}
 
 	/**
