@@ -5,6 +5,12 @@ import com.iflytek.cloud.speech.SpeechError;
 import com.iflytek.cloud.speech.SpeechSynthesizer;
 import com.iflytek.cloud.speech.SynthesizerListener;
 
+/**
+ * @description: 讯飞在线语音合成
+ * @author: Lin
+ * @create: 2018年9月14日
+ * @version: 1.0
+ */
 public class Speech {
 
 	private static SpeechSynthesizer _ss = null;
