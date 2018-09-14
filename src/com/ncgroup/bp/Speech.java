@@ -40,7 +40,7 @@ public class Speech {
 			// 合成并播报文本
 			synthesis(content);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.error("文本播放异常", e);
 		}
 	}
 
