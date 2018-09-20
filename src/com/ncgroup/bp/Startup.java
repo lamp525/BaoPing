@@ -17,9 +17,11 @@ public class Startup {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		try {
-			Log.info("程序启动！");
+		Log.info("程序启动！");
+		// 网络时间校准
+		TimeCalibrate.run();
 
+		try {
 			// 初始化讯飞语音合成SDK
 			SpeechUtility.createUtility(SpeechConstant.APPID + "=" + MY_APPID);
 
