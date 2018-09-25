@@ -78,26 +78,26 @@ public class DataSource {
 					amountList = LeastSquareSmooth.sevenPointsSmooth(amountList);
 
 					sqlInsert = "INSERT INTO [dbo].[BP_5MStandard_" + indexCode
-							+ "_new]([TradeDate],[TradeTime],[VolumeRate],[AmountRate],[Volume],[Amount],[AccVolume],[AccAmount]) VALUES(?,?,?,?,?,?,?,?) ";
+							+ "]([TradeDate],[TradeTime],[VolumeRate],[AmountRate],[Volume],[Amount],[AccVolume],[AccAmount]) VALUES(?,?,?,?,?,?,?,?) ";
 					Connection connection = SqlHelper.getConnection();
 					PreparedStatement ps = connection.prepareStatement(sqlInsert);
 
 					index = 0;
 					rs.beforeFirst();
 					while (rs.next()) {
-						ps.setDate(1, rs.getDate(1));
-						ps.setString(2, rs.getString(2));
-						ps.setDouble(3, rs.getDouble(3));
-						ps.setDouble(4, rs.getDouble(4));
-						ps.setDouble(5, volList[index]);
-						ps.setDouble(6, amountList[index]);
-						ps.setDouble(7, rs.getDouble(7));
-						ps.setDouble(8, rs.getDouble(8));
+						ps.setDate(1, rs.getDate(1)); // 日期
+						ps.setString(2, rs.getString(2)); // 时间
+						ps.setDouble(3, rs.getDouble(3)); // 量分配比例
+						ps.setDouble(4, rs.getDouble(4)); // 金额分配比例
+						ps.setDouble(5, volList[index]); // 量
+						ps.setDouble(6, amountList[index]); // 金额
+						ps.setDouble(7, rs.getDouble(7)); // 累计量
+						ps.setDouble(8, rs.getDouble(8)); // 累计金额
 						ps.addBatch();
 						++index;
 					}
 					/* 删除已有数据 */
-					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "_new] WHERE TradeDate = '" + today
+					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "] WHERE TradeDate = '" + today
 							+ "'";
 					SqlHelper.execSql(sqlDelete);
 
