@@ -30,7 +30,7 @@ public class Speech {
 		try {
 			getInstance();
 			while (_ss.isSpeaking()) {
-				ThreadUtil.threadSleep(3 * 1000);
+				ThreadUtil.threadSleep(Thread.currentThread().getName(), 3 * 1000);
 			}
 			Log.info(content);
 

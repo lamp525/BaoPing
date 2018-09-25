@@ -73,7 +73,7 @@ public class TimerManager {
 			if (_dataProcTask == null)
 				_dataProcTask = new DataProcTask();
 			_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
-			Log.info("开始执行数据处理任务！");
+			Log.info("启动数据处理任务！");
 
 			break;
 		}
@@ -82,7 +82,7 @@ public class TimerManager {
 				_broadcastTask = new BroadcastTask();
 
 			_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
-			Log.info("开始执行数据播报任务！");
+			Log.info("启动数据播报任务！");
 
 			break;
 		}
@@ -91,13 +91,13 @@ public class TimerManager {
 			if (_dataProcTask == null)
 				_dataProcTask = new DataProcTask();
 			_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
-			Log.info("开始执行数据处理任务！");
+			Log.info("启动数据处理任务！");
 
 			if (_broadcastTask == null)
 				_broadcastTask = new BroadcastTask();
 
 			_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
-			Log.info("开始执行数据播报任务！");
+			Log.info("启动数据播报任务！");
 			break;
 		}
 		}

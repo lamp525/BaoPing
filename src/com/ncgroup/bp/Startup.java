@@ -18,6 +18,7 @@ public class Startup {
 	 */
 	public static void main(String[] args) {
 		Log.info("程序启动！");
+
 		// 网络时间校准（当前用户为系统管理员才有效）
 		TimeCalibrate.run();
 
@@ -31,6 +32,7 @@ public class Startup {
 					try {
 						// 定时任务管理器实例
 						TimerManager tm = TimerManager.getInstance();
+
 						/* 设置程序运行模式 */
 						TimerManager.ExecMode mode = null;
 						if (args.length == 0)
@@ -44,6 +46,7 @@ public class Startup {
 								mode = TimerManager.ExecMode.ALL;
 						}
 						tm.setExecMode(mode);
+
 						int weekDay = -1;
 						while (true) {
 							weekDay = DateHelper.getWeekDayByCurrentTime();
@@ -57,7 +60,7 @@ public class Startup {
 									tm.startTimerTask();
 							}
 							// 工作线程休眠4小时
-							ThreadUtil.threadSleep(4 * 60 * 60 * 1000);
+							ThreadUtil.threadSleep(Thread.currentThread().getName(), 4 * 60 * 60 * 1000);
 						}
 					} catch (Exception e) {
 						Log.error("工作线程异常！", e);

@@ -30,11 +30,13 @@ public class DataProcTask extends TimerTask {
 				DataSource.dataProc5M();
 			}
 			// 盘后数据处理
-			else if (iTime > 1540 && iTime < 1600) {
+			else if (iTime > 1540 && iTime < 1730) {
 				if (oneTimeFlag == false) {
+					Log.info("执行盘后数据处理！");
 					DataSource.closeHourProc1M();
 					DataSource.closeHourProc5M();
 					oneTimeFlag = true;
+					Log.info("盘后数据处理完成！");
 				}
 			}
 
