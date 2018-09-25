@@ -39,7 +39,6 @@ public final class TimeCalibrate {
 				runTime.exec("cmd /c time " + strTime);
 				runTime.exec("cmd /c date " + strDate);
 
-				Log.info("系统时间校准成功！");
 				Log.info(" 本地系统时间：" + DateHelper.now());
 			}
 		} catch (Exception e) {

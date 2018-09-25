@@ -1,5 +1,7 @@
 package com.ncgroup.bp;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 public class DataSource {
 	private static int _count1M = 0;
 	private static int _count5M = 0;
+	private static final int ROW_COUNT = 48;
 
 	/**
 	 * 5分钟数据处理
@@ -20,9 +23,90 @@ public class DataSource {
 		try {
 			String sql = "EXEC [dbo].[sp_BP_5MStart]";
 			SqlHelper.ExecSql(sql);
+
 		} catch (Exception e) {
 			Log.error("dataProc5M", e);
 		}
+	}
+
+	/**
+	 * @description: 盘后1分钟数据处理
+	 */
+	public static void closeHourProc1M() {
+		String today = DateHelper.now("yyyy-MM-dd");
+		/* 保存今日1分钟数据，并计算近30日的加权平均值 */
+		String sql = "EXEC [dbo].[sp_BP_1MEnd] @CurDate = '" + today + "'";
+		SqlHelper.ExecSql(sql);
+	}
+
+	/**
+	 * @description: 盘后5分钟数据处理
+	 */
+	public static void closeHourProc5M() {
+		try {
+			String today = "2018-09-21";
+//			String today = DateHelper.now("yyyy-MM-dd");
+
+			/* 保存今日5分钟数据，并计算近30日的加权平均值 */
+			String sql = "EXEC [dbo].[sp_BP_5MEnd] @CurDate = '" + today + "'";
+			SqlHelper.ExecSql(sql);
+
+			/* 平滑处理 */
+			String sqlSelect, sqlInsert, sqlDelete;
+			ResultSet rs = null;
+			double[] volList = new double[ROW_COUNT];
+			double[] amountList = new double[ROW_COUNT];
+			ArrayList<String> indexList = new ArrayList<String>();
+			indexList.add("SZ");
+			indexList.add("ZX");
+			indexList.add("CY");
+			for (String indexCode : indexList) {
+				sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "_new] WHERE TradeDate = '" + today
+						+ "'";
+				SqlHelper.ExecSql(sqlDelete);
+
+				sqlSelect = "SELECT TradeDate,TradeTime,VolumeRate,AmountRate,Volume,Amount,AccVolume,AccAmount FROM [dbo].[BP_5MStandard_"
+						+ indexCode + "] WHERE TradeDate = '" + today + "'";
+				rs = SqlHelper.getResultSet(sqlSelect);
+
+				int index = 0;
+				while (rs.next()) {
+					volList[index] = rs.getDouble(5);
+					amountList[index] = rs.getDouble(6);
+					++index;
+				}
+				if (volList.length == ROW_COUNT && amountList.length == ROW_COUNT) {
+					volList = LeastSquareSmooth.fivePointsSmooth(volList);
+					amountList = LeastSquareSmooth.fivePointsSmooth(amountList);
+
+					sqlInsert = "INSERT INTO [dbo].[BP_5MStandard_" + indexCode
+							+ "_new]([TradeDate],[TradeTime],[VolumeRate],[AmountRate],[Volume],[Amount],[AccVolume],[AccAmount]) VALUES(?,?,?,?,?,?,?,?) ";
+					Connection connection = SqlHelper.getConnection();
+					PreparedStatement ps = connection.prepareStatement(sqlInsert);
+
+					index = 0;
+					rs.beforeFirst();
+					while (rs.next()) {
+						ps.setDate(1, rs.getDate(1));
+						ps.setString(2, rs.getString(2));
+						ps.setDouble(3, rs.getDouble(3));
+						ps.setDouble(4, rs.getDouble(4));
+						ps.setDouble(5, volList[index]);
+						ps.setDouble(6, amountList[index]);
+						ps.setDouble(7, rs.getDouble(7));
+						ps.setDouble(8, rs.getDouble(8));
+						ps.addBatch();
+						++index;
+					}
+					ps.executeBatch();
+					ps.close();
+					connection.close();
+				}
+			}
+		} catch (Exception e) {
+			Log.error("standardProc5M", e);
+		}
+
 	}
 
 	/**

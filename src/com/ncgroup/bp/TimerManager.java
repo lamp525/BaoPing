@@ -14,7 +14,7 @@ public class TimerManager {
 	private BroadcastTask _broadcastTask = null;
 	private DataProcTask _dataProcTask = null;
 	private final int PLAY_PERIOD = 2 * 1000;
-	private final int DATA_PERIOD = 9 * 1000;
+	private final int DATA_PERIOD = 999999 * 1000;
 	private boolean _isStopped = true;
 
 	private TimerManager() {
