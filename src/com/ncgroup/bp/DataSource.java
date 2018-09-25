@@ -1,8 +1,6 @@
 package com.ncgroup.bp;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +20,7 @@ public class DataSource {
 	public static void dataProc5M() {
 		try {
 			String sql = "EXEC [dbo].[sp_BP_5MStart]";
-			SqlHelper.ExecSql(sql);
+			SqlHelper.execSql(sql);
 
 		} catch (Exception e) {
 			Log.error("dataProc5M", e);
@@ -33,10 +31,15 @@ public class DataSource {
 	 * @description: 盘后1分钟数据处理
 	 */
 	public static void closeHourProc1M() {
-		String today = DateHelper.now("yyyy-MM-dd");
-		/* 保存今日1分钟数据，并计算近30日的加权平均值 */
-		String sql = "EXEC [dbo].[sp_BP_1MEnd] @CurDate = '" + today + "'";
-		SqlHelper.ExecSql(sql);
+		try {
+			String today = DateHelper.now("yyyy-MM-dd");
+
+			/* 保存今日1分钟数据，并计算近30日的加权平均值 */
+			String sql = "EXEC [dbo].[sp_BP_1MEnd] @CurDate = '" + today + "'";
+			SqlHelper.execSql(sql);
+		} catch (Exception e) {
+			Log.error("closeHourProc1M", e);
+		}
 	}
 
 	/**
@@ -44,12 +47,11 @@ public class DataSource {
 	 */
 	public static void closeHourProc5M() {
 		try {
-			String today = "2018-09-21";
-//			String today = DateHelper.now("yyyy-MM-dd");
+			String today = DateHelper.now("yyyy-MM-dd");
 
 			/* 保存今日5分钟数据，并计算近30日的加权平均值 */
 			String sql = "EXEC [dbo].[sp_BP_5MEnd] @CurDate = '" + today + "'";
-			SqlHelper.ExecSql(sql);
+			SqlHelper.execSql(sql);
 
 			/* 平滑处理 */
 			String sqlSelect, sqlInsert, sqlDelete;
@@ -61,10 +63,6 @@ public class DataSource {
 			indexList.add("ZX");
 			indexList.add("CY");
 			for (String indexCode : indexList) {
-				sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "_new] WHERE TradeDate = '" + today
-						+ "'";
-				SqlHelper.ExecSql(sqlDelete);
-
 				sqlSelect = "SELECT TradeDate,TradeTime,VolumeRate,AmountRate,Volume,Amount,AccVolume,AccAmount FROM [dbo].[BP_5MStandard_"
 						+ indexCode + "] WHERE TradeDate = '" + today + "'";
 				rs = SqlHelper.getResultSet(sqlSelect);
@@ -76,8 +74,8 @@ public class DataSource {
 					++index;
 				}
 				if (volList.length == ROW_COUNT && amountList.length == ROW_COUNT) {
-					volList = LeastSquareSmooth.fivePointsSmooth(volList);
-					amountList = LeastSquareSmooth.fivePointsSmooth(amountList);
+					volList = LeastSquareSmooth.sevenPointsSmooth(volList);
+					amountList = LeastSquareSmooth.sevenPointsSmooth(amountList);
 
 					sqlInsert = "INSERT INTO [dbo].[BP_5MStandard_" + indexCode
 							+ "_new]([TradeDate],[TradeTime],[VolumeRate],[AmountRate],[Volume],[Amount],[AccVolume],[AccAmount]) VALUES(?,?,?,?,?,?,?,?) ";
@@ -98,15 +96,20 @@ public class DataSource {
 						ps.addBatch();
 						++index;
 					}
+					/* 删除已有数据 */
+					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "_new] WHERE TradeDate = '" + today
+							+ "'";
+					SqlHelper.execSql(sqlDelete);
+
+					// 插入平滑后的数据
 					ps.executeBatch();
 					ps.close();
 					connection.close();
 				}
 			}
 		} catch (Exception e) {
-			Log.error("standardProc5M", e);
+			Log.error("closeHourProc5M", e);
 		}
-
 	}
 
 	/**
@@ -115,7 +118,7 @@ public class DataSource {
 	public static void dataProc1M() {
 		try {
 			String sql = "EXEC [dbo].[sp_BP_1MStart]";
-			SqlHelper.ExecSql(sql);
+			SqlHelper.execSql(sql);
 		} catch (Exception e) {
 			Log.error("dataProc1M", e);
 		}

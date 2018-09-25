@@ -10,7 +10,7 @@ import java.util.TimerTask;
  * @version: 1.0
  */
 public class DataProcTask extends TimerTask {
-	private boolean afterHourProc = false;
+	private boolean oneTimeFlag = false;
 
 	/**
 	 * 启动数据处理任务
@@ -21,24 +21,22 @@ public class DataProcTask extends TimerTask {
 			Date now = new Date();
 			int iTime = DateHelper.getHourByCurrentTime(now) * 100 + DateHelper.getMinuteByCurrentTime(now);
 
-//			// 1分钟数据处理
-//			if (iTime >= 925 && iTime <= 934) {
-//				DataSource.dataProc1M();
-//			}
-//			// 5分钟数据处理
-//			else if ((iTime >= 935 && iTime < 1132) || (iTime >= 1305 && iTime < 1503)) {
-//				DataSource.dataProc5M();
-//			}
-//			// 盘后数据处理
-//			else if (iTime > 1540 && iTime < 1600) {
-//				if (afterHourProc == false) {
-//					//DataSource.closeHourProc1M();
-//					DataSource.closeHourProc5M();
-//				}
-//			}
-			
-			//Test
-			DataSource.closeHourProc5M();
+			// 1分钟数据处理
+			if (iTime >= 925 && iTime <= 934) {
+				DataSource.dataProc1M();
+			}
+			// 5分钟数据处理
+			else if ((iTime >= 935 && iTime < 1132) || (iTime >= 1305 && iTime < 1503)) {
+				DataSource.dataProc5M();
+			}
+			// 盘后数据处理
+			else if (iTime > 1540 && iTime < 1600) {
+				if (oneTimeFlag == false) {
+					DataSource.closeHourProc1M();
+					DataSource.closeHourProc5M();
+					oneTimeFlag = true;
+				}
+			}
 
 		} catch (Exception e) {
 			Log.error("数据处理任务异常！", e);

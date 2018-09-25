@@ -157,7 +157,7 @@ public class SqlHelper {
 	 * @param cmdText SQL 语句
 	 * @return 非负数:正常执行; -1:执行错误; -2:连接错误
 	 */
-	public static int ExecSql(String cmdText) {
+	public static int execSql(String cmdText) {
 		Statement stmt = getStatement();
 		if (stmt == null) {
 			return -2;
@@ -179,7 +179,7 @@ public class SqlHelper {
 	 * @param cmdText SQL 语句
 	 * @return 非负数:正常执行; -1:执行错误; -2:连接错误
 	 */
-	public static int ExecSql(Connection conn, String cmdText) {
+	public static int execSql(Connection conn, String cmdText) {
 		Statement stmt = getStatement(conn);
 		if (stmt == null) {
 			return -2;
@@ -203,7 +203,7 @@ public class SqlHelper {
 	 * @param cmdParams SQL 语句的参数表
 	 * @return 非负数:正常执行; -1:执行错误; -2:连接错误
 	 */
-	public static int ExecSql(String cmdText, Object... cmdParams) {
+	public static int execSql(String cmdText, Object... cmdParams) {
 		PreparedStatement pstmt = getPreparedStatement(cmdText, cmdParams);
 		if (pstmt == null) {
 			return -2;
@@ -227,7 +227,7 @@ public class SqlHelper {
 	 * @param cmdParams SQL 语句的参数表
 	 * @return 非负数:正常执行; -1:执行错误; -2:连接错误
 	 */
-	public static int ExecSql(Connection conn, String cmdText, Object... cmdParams) {
+	public static int execSql(Connection conn, String cmdText, Object... cmdParams) {
 		PreparedStatement pstmt = getPreparedStatement(conn, cmdText, cmdParams);
 		if (pstmt == null) {
 			return -2;
