@@ -18,7 +18,7 @@ public class Startup {
 	 */
 	public static void main(String[] args) {
 		Log.info("程序启动！");
-		// 网络时间校准
+		// 网络时间校准（当前用户为系统管理员才有效）
 		TimeCalibrate.run();
 
 		try {
@@ -31,6 +31,19 @@ public class Startup {
 					try {
 						// 定时任务管理器实例
 						TimerManager tm = TimerManager.getInstance();
+						/* 设置程序运行模式 */
+						TimerManager.ExecMode mode = null;
+						if (args.length == 0)
+							mode = TimerManager.ExecMode.ALL;
+						else {
+							if (args[0].equals("c") || args[0].equals("C"))
+								mode = TimerManager.ExecMode.CLIENT;
+							else if (args[0].equals("s") || args[0].equals("S"))
+								mode = TimerManager.ExecMode.SERVER;
+							else
+								mode = TimerManager.ExecMode.ALL;
+						}
+						tm.setExecMode(mode);
 						int weekDay = -1;
 						while (true) {
 							weekDay = DateHelper.getWeekDayByCurrentTime();

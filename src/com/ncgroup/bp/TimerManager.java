@@ -20,6 +20,29 @@ public class TimerManager {
 	private TimerManager() {
 	}
 
+	public static enum ExecMode {
+		SERVER, CLIENT, ALL
+	}
+
+	private ExecMode _execMode;
+
+	/**
+	 * @description: 设定运行模式
+	 * @param mode
+	 */
+	public void setExecMode(ExecMode mode) {
+		_execMode = mode;
+	}
+
+	/**
+	 * @description: 获取运行模式
+	 * @return the _execMode
+	 */
+	@SuppressWarnings("unused")
+	private ExecMode getExecMode() {
+		return _execMode;
+	}
+
 	/**
 	 * @Description: 单例模式
 	 */
@@ -44,17 +67,40 @@ public class TimerManager {
 	 */
 	public void startTimerTask() {
 		_timer.purge();
-		if (_broadcastTask == null)
-			_broadcastTask = new BroadcastTask();
 
-		if (_dataProcTask == null)
-			_dataProcTask = new DataProcTask();
+		switch (_execMode) {
+		case SERVER: {
+			if (_dataProcTask == null)
+				_dataProcTask = new DataProcTask();
+			_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
+			Log.info("开始执行数据处理任务！");
 
-		_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
-		Log.info("开始执行数据处理任务！");
+			break;
+		}
+		case CLIENT: {
+			if (_broadcastTask == null)
+				_broadcastTask = new BroadcastTask();
 
-		_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
-		Log.info("开始执行数据播报任务！");
+			_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
+			Log.info("开始执行数据播报任务！");
+
+			break;
+		}
+		case ALL:
+		default: {
+			if (_dataProcTask == null)
+				_dataProcTask = new DataProcTask();
+			_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
+			Log.info("开始执行数据处理任务！");
+
+			if (_broadcastTask == null)
+				_broadcastTask = new BroadcastTask();
+
+			_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
+			Log.info("开始执行数据播报任务！");
+			break;
+		}
+		}
 
 		_isStopped = false;
 	}
@@ -64,14 +110,38 @@ public class TimerManager {
 	 *
 	 */
 	public void stopTimerTask() {
-		_broadcastTask.cancel();
-		_broadcastTask = null;
-		Log.info("取消数据处理任务！");
+		_isStopped = false;
 
-		_dataProcTask.cancel();
-		_dataProcTask = null;
-		Log.info("取消数据播报任务！");
+		switch (_execMode) {
+		case SERVER: {
+			_dataProcTask.cancel();
+			_dataProcTask = null;
+			Log.info("取消数据处理任务！");
+
+			break;
+		}
+		case CLIENT: {
+			_broadcastTask.cancel();
+			_broadcastTask = null;
+			Log.info("取消数据播报任务！");
+
+			break;
+		}
+		case ALL:
+		default: {
+			_dataProcTask.cancel();
+			_dataProcTask = null;
+			Log.info("取消数据处理任务！");
+
+			_broadcastTask.cancel();
+			_broadcastTask = null;
+			Log.info("取消数据播报任务！");
+
+			break;
+		}
+		}
 
 		_isStopped = true;
 	}
+
 }
