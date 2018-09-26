@@ -18,10 +18,6 @@ public class Startup {
 	 */
 	public static void main(String[] args) {
 		Log.info("程序启动！");
-
-		// 网络时间校准（当前用户为系统管理员才有效）
-		TimeCalibrate.run();
-
 		try {
 			// 初始化讯飞语音合成SDK
 			SpeechUtility.createUtility(SpeechConstant.APPID + "=" + MY_APPID);
@@ -49,6 +45,8 @@ public class Startup {
 
 						int weekDay = -1;
 						while (true) {
+							// 网络时间校准（当前用户为系统管理员才有效）
+							TimeCalibrate.run();
 							weekDay = DateHelper.getWeekDayByCurrentTime();
 							// 周末停止任务
 							if (weekDay == 7 || weekDay == 1) {
