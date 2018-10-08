@@ -29,13 +29,12 @@ public class DataSource {
 
 	/**
 	 * @description: 盘后1分钟数据处理
+	 * @param date [yyyy-MM-dd]
 	 */
-	public static void closeHourProc1M() {
+	public static void closeHourProc1M(String date) {
 		try {
-			String today = DateHelper.now("yyyy-MM-dd");
-
 			/* 保存今日1分钟数据，并计算近30日的加权平均值 */
-			String sql = "EXEC [dbo].[sp_BP_1MEnd] @CurDate = '" + today + "'";
+			String sql = "EXEC [dbo].[sp_BP_1MEnd] @CurDate = '" + date + "'";
 			SqlHelper.execSql(sql);
 		} catch (Exception e) {
 			Log.error("closeHourProc1M", e);
@@ -44,13 +43,13 @@ public class DataSource {
 
 	/**
 	 * @description: 盘后5分钟数据处理
+	 * @param date [yyyy-MM-dd]
 	 */
-	public static void closeHourProc5M() {
+	public static void closeHourProc5M(String date) {
 		try {
-			String today = DateHelper.now("yyyy-MM-dd");
 
 			/* 保存今日5分钟数据，并计算近30日的加权平均值 */
-			String sql = "EXEC [dbo].[sp_BP_5MEnd] @CurDate = '" + today + "'";
+			String sql = "EXEC [dbo].[sp_BP_5MEnd] @CurDate = '" + date + "'";
 			SqlHelper.execSql(sql);
 
 			/* 平滑处理 */
@@ -64,7 +63,7 @@ public class DataSource {
 			indexList.add("CY");
 			for (String indexCode : indexList) {
 				sqlSelect = "SELECT TradeDate,TradeTime,VolumeRate,AmountRate,Volume,Amount,AccVolume,AccAmount FROM [dbo].[BP_5MStandard_"
-						+ indexCode + "] WHERE TradeDate = '" + today + "'";
+						+ indexCode + "] WHERE TradeDate = '" + date + "'";
 				rs = SqlHelper.getResultSet(sqlSelect);
 
 				int index = 0;
@@ -97,7 +96,7 @@ public class DataSource {
 						++index;
 					}
 					/* 删除已有数据 */
-					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "] WHERE TradeDate = '" + today
+					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "] WHERE TradeDate = '" + date
 							+ "'";
 					SqlHelper.execSql(sqlDelete);
 

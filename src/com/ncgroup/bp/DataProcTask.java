@@ -20,6 +20,7 @@ public class DataProcTask extends TimerTask {
 		try {
 			Date now = new Date();
 			int iTime = DateHelper.getHourByCurrentTime(now) * 100 + DateHelper.getMinuteByCurrentTime(now);
+			String date = DateHelper.getFormatTime(now,"yyyy-MM-dd");
 
 			// 1分钟数据处理
 			if (iTime >= 925 && iTime <= 934) {
@@ -33,8 +34,8 @@ public class DataProcTask extends TimerTask {
 			else if (iTime > 1540 && iTime < 1730) {
 				if (oneTimeFlag == false) {
 					Log.info("执行盘后数据处理！");
-					DataSource.closeHourProc1M();
-					DataSource.closeHourProc5M();
+					DataSource.closeHourProc1M(date);
+					DataSource.closeHourProc5M(date);
 					oneTimeFlag = true;
 					Log.info("盘后数据处理完成！");
 				}
