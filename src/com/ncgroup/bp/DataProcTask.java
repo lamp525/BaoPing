@@ -38,6 +38,10 @@ public class DataProcTask extends TimerTask {
 					oneTimeFlag = true;
 					Log.info("盘后数据处理完成！");
 				}
+				// 重置盘后数据处理标志
+			} else {
+				if (oneTimeFlag == true)
+					oneTimeFlag = false;
 			}
 
 		} catch (Exception e) {

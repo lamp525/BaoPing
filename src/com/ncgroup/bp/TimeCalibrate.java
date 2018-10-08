@@ -31,8 +31,9 @@ public final class TimeCalibrate {
 
 			Date date = getNetworkTime(URL);
 			if (date != null) {
-				String strTime = DateHelper.getFormatTime(date, "HH:mm:ss");
-				String strDate = DateHelper.getFormatTime(date, "yyyy-MM-dd");
+				Date newDate = DateHelper.getTimeBySecond(date, 5);
+				String strTime = DateHelper.getFormatTime(newDate, "HH:mm:ss");
+				String strDate = DateHelper.getFormatTime(newDate, "yyyy-MM-dd");
 				Log.info("北京时间：" + strDate + " " + strTime);
 
 				Runtime runTime = Runtime.getRuntime();

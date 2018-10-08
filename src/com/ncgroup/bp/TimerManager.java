@@ -67,41 +67,19 @@ public class TimerManager {
 	 */
 	public void startTimerTask() {
 		_timer.purge();
-
 		switch (_execMode) {
-		case SERVER: {
-			if (_dataProcTask == null)
-				_dataProcTask = new DataProcTask();
-			_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
-			Log.info("启动数据处理任务！");
-
+		case SERVER:
+			startDataProc();
 			break;
-		}
-		case CLIENT: {
-			if (_broadcastTask == null)
-				_broadcastTask = new BroadcastTask();
-
-			_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
-			Log.info("启动数据播报任务！");
-
+		case CLIENT:
+			startBroadcast();
 			break;
-		}
 		case ALL:
-		default: {
-			if (_dataProcTask == null)
-				_dataProcTask = new DataProcTask();
-			_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
-			Log.info("启动数据处理任务！");
-
-			if (_broadcastTask == null)
-				_broadcastTask = new BroadcastTask();
-
-			_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
-			Log.info("启动数据播报任务！");
+		default:
+			startDataProc();
+			startBroadcast();
 			break;
 		}
-		}
-
 		_isStopped = false;
 	}
 
@@ -111,37 +89,66 @@ public class TimerManager {
 	 */
 	public void stopTimerTask() {
 		_isStopped = false;
-
 		switch (_execMode) {
-		case SERVER: {
-			_dataProcTask.cancel();
-			_dataProcTask = null;
-			Log.info("取消数据处理任务！");
-
+		case SERVER:
+			stopDataProc();
 			break;
-		}
-		case CLIENT: {
-			_broadcastTask.cancel();
-			_broadcastTask = null;
-			Log.info("取消数据播报任务！");
-
+		case CLIENT:
+			stopBroadcast();
 			break;
-		}
 		case ALL:
-		default: {
-			_dataProcTask.cancel();
-			_dataProcTask = null;
-			Log.info("取消数据处理任务！");
-
-			_broadcastTask.cancel();
-			_broadcastTask = null;
-			Log.info("取消数据播报任务！");
-
+		default:
+			stopBroadcast();
+			stopDataProc();
 			break;
 		}
-		}
-
 		_isStopped = true;
 	}
 
+	/**
+	 * @description: 启动数据播报任务
+	 *
+	 */
+	private void startBroadcast() {
+		if (_broadcastTask == null)
+			_broadcastTask = new BroadcastTask();
+
+		_timer.schedule(_broadcastTask, 0, PLAY_PERIOD);
+		Log.info("启动数据播报任务！");
+	}
+
+	/**
+	 * @description: 启动数据处理任务
+	 *
+	 */
+	private void startDataProc() {
+		if (_dataProcTask == null)
+			_dataProcTask = new DataProcTask();
+		_timer.schedule(_dataProcTask, 0, DATA_PERIOD);
+		Log.info("启动数据处理任务！");
+	}
+
+	/**
+	 * @description: 取消数据播报任务
+	 *
+	 */
+	private void stopBroadcast() {
+		if (_broadcastTask != null) {
+			_broadcastTask.cancel();
+			_broadcastTask = null;
+			Log.info("取消数据播报任务！");
+		}
+	}
+
+	/**
+	 * @description: 取消数据播报任务
+	 *
+	 */
+	private void stopDataProc() {
+		if (_broadcastTask != null) {
+			_broadcastTask.cancel();
+			_broadcastTask = null;
+			Log.info("取消数据播报任务！");
+		}
+	}
 }

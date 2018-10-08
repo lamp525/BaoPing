@@ -193,6 +193,16 @@ public class DateHelper {
 		} else
 			return "";
 	}
+	
+	/**
+	 * 获取当前时间之前或之后几秒 second
+	 */
+	public static Date getTimeBySecond(Date date, int second) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.SECOND, second);
+		return calendar.getTime();
+	}
 
 	/**
 	 * @description: 毫秒转化为 天、小时、分钟、秒、毫秒
