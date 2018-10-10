@@ -76,6 +76,9 @@ public class Speech {
 		_ss.startSpeaking(content, _synListener);
 	}
 
+	/**
+	 * 语音合成监听器对象
+	 */
 	private static SynthesizerListener _synListener = new SynthesizerListener() {
 
 		@Override

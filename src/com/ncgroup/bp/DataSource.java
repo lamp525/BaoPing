@@ -15,16 +15,104 @@ public class DataSource {
 	private static final int ROW_COUNT = 48;
 
 	/**
-	 * 5分钟数据处理
+	 * @description: 1分钟数据处理
+	 *
+	 */
+	public static void dataProc1M() {
+		try {
+			String sql = "EXEC [dbo].[sp_BP_1MStart]";
+			SqlHelper.execSql(sql);
+		} catch (Exception e) {
+			Log.error("dataProc1M", e);
+		}
+	}
+
+	/**
+	 * @description: 5分钟数据处理
+	 *
 	 */
 	public static void dataProc5M() {
 		try {
 			String sql = "EXEC [dbo].[sp_BP_5MStart]";
 			SqlHelper.execSql(sql);
-
 		} catch (Exception e) {
 			Log.error("dataProc5M", e);
 		}
+	}
+
+	/**
+	 * @description: 1分钟数据更新检查
+	 * @return
+	 */
+	public static Boolean checkUpdate1M() {
+		Boolean result = false;
+		int count = getResultCount1M();
+		if (count > _count1M) {
+			result = true;
+			_count1M = count;
+		}
+		return result;
+	}
+
+	/**
+	 * @description: 5分钟数据更新检查
+	 * @return
+	 */
+	public static Boolean checkUpdate5M() {
+		Boolean result = false;
+		int count = getResultCount5M();
+		if (count > _count5M && count % 3 == 0) {
+			result = true;
+			_count5M = count;
+		}
+		return result;
+	}
+
+	/**
+	 * @description: 取得1分钟量、金额数据
+	 * @param indexCode
+	 * @return
+	 */
+	public static ArrayList<String> getResult1M(String indexCode) {
+		ArrayList<String> arr = new ArrayList<String>();
+		try {
+			String sql = " SELECT TOP(1) [TradeTime],[VolRate],[AccVolRate],[AmountRate],[AccAmountRate]  FROM [dbo].[BP_1MResult_"
+					+ indexCode + "]  ORDER BY TradeTime DESC ";
+			ResultSet rs = SqlHelper.getResultSet(sql);
+
+			if (rs != null && rs.first()) {
+				arr.add(rs.getString(1)); // 时间
+				arr.add(rs.getString(2)); // 量比
+				arr.add(rs.getString(3)); // 累计量比
+				arr.add(rs.getString(4)); // 金额比
+				arr.add(rs.getString(5)); // 累计金额比
+			}
+		} catch (Exception e) {
+			Log.error("getResult1M", e);
+		}
+		return arr;
+	}
+
+	/**
+	 * @description: 取得5分钟量、金额播报信息
+	 * @param indexCode
+	 * @return
+	 */
+	public static ArrayList<String> getResult5M(String indexCode) {
+		ArrayList<String> arr = new ArrayList<String>();
+		try {
+			String sql = " SELECT TOP(1) [时间],[标准值_金额比],[标准值_累计金额比] FROM [dbo].[BP_5MResult_" + indexCode
+					+ "]  ORDER BY  [时间] DESC ";
+			ResultSet rs = SqlHelper.getResultSet(sql);
+			if (rs != null && rs.first()) {
+				arr.add(rs.getString(1));// 时间
+				arr.add(rs.getString(2)); // 金额比
+				arr.add(rs.getString(3)); // 累计金额比
+			}
+		} catch (Exception e) {
+			Log.error("getResult5M", e);
+		}
+		return arr;
 	}
 
 	/**
@@ -47,7 +135,6 @@ public class DataSource {
 	 */
 	public static void closeHourProc5M(String date) {
 		try {
-
 			/* 保存今日5分钟数据，并计算近30日的加权平均值 */
 			String sql = "EXEC [dbo].[sp_BP_5MEnd] @CurDate = '" + date + "'";
 			SqlHelper.execSql(sql);
@@ -65,7 +152,6 @@ public class DataSource {
 				sqlSelect = "SELECT TradeDate,TradeTime,VolumeRate,AmountRate,Volume,Amount,AccVolume,AccAmount FROM [dbo].[BP_5MStandard_"
 						+ indexCode + "] WHERE TradeDate = '" + date + "'";
 				rs = SqlHelper.getResultSet(sqlSelect);
-
 				int index = 0;
 				while (rs.next()) {
 					volList[index] = rs.getDouble(5);
@@ -75,7 +161,6 @@ public class DataSource {
 				if (volList.length == ROW_COUNT && amountList.length == ROW_COUNT) {
 					volList = LeastSquareSmooth.sevenPointsSmooth(volList);
 					amountList = LeastSquareSmooth.sevenPointsSmooth(amountList);
-
 					sqlInsert = "INSERT INTO [dbo].[BP_5MStandard_" + indexCode
 							+ "]([TradeDate],[TradeTime],[VolumeRate],[AmountRate],[Volume],[Amount],[AccVolume],[AccAmount]) VALUES(?,?,?,?,?,?,?,?) ";
 					Connection connection = SqlHelper.getConnection();
@@ -96,8 +181,7 @@ public class DataSource {
 						++index;
 					}
 					/* 删除已有数据 */
-					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "] WHERE TradeDate = '" + date
-							+ "'";
+					sqlDelete = "DELETE FROM  [dbo].[BP_5MStandard_" + indexCode + "] WHERE TradeDate = '" + date + "'";
 					SqlHelper.execSql(sqlDelete);
 
 					// 插入平滑后的数据
@@ -112,101 +196,11 @@ public class DataSource {
 	}
 
 	/**
-	 * 1分钟数据处理
-	 */
-	public static void dataProc1M() {
-		try {
-			String sql = "EXEC [dbo].[sp_BP_1MStart]";
-			SqlHelper.execSql(sql);
-		} catch (Exception e) {
-			Log.error("dataProc1M", e);
-		}
-	}
-
-	/**
-	 * 1分钟数据更新检查
-	 */
-	public static Boolean checkUpdate1M() {
-		Boolean result = false;
-
-		int count = getResultCount1M();
-		if (count > _count1M) {
-			result = true;
-			_count1M = count;
-		}
-
-		return result;
-	}
-
-	/**
-	 * 5分钟数据更新检查
-	 */
-	public static Boolean checkUpdate5M() {
-		Boolean result = false;
-
-		int count = getResultCount5M();
-		if (count > _count5M && count % 3 == 0) {
-			result = true;
-			_count5M = count;
-		}
-
-		return result;
-	}
-
-	/**
-	 * 取得1分钟量、金额数据
-	 */
-	public static ArrayList<String> getResult1M(String indexCode) {
-		ArrayList<String> arr = new ArrayList<String>();
-
-		try {
-			String sql = " SELECT TOP(1) [TradeTime],[VolRate],[AccVolRate],[AmountRate],[AccAmountRate]  FROM [dbo].[BP_1MResult_"
-					+ indexCode + "]  ORDER BY TradeTime DESC ";
-			ResultSet rs = SqlHelper.getResultSet(sql);
-
-			if (rs != null && rs.first()) {
-				arr.add(rs.getString(1)); // 时间
-				arr.add(rs.getString(2)); // 量比
-				arr.add(rs.getString(3)); // 累计量比
-				arr.add(rs.getString(4)); // 金额比
-				arr.add(rs.getString(5)); // 累计金额比
-			}
-		} catch (Exception e) {
-			Log.error("getResult1M", e);
-		}
-
-		return arr;
-	}
-
-	/**
-	 * 取得5分钟量、金额播报信息
-	 */
-	public static ArrayList<String> getResult5M(String indexCode) {
-		ArrayList<String> arr = new ArrayList<String>();
-
-		try {
-			String sql = " SELECT TOP(1) [时间],[标准值_金额比],[标准值_累计金额比] FROM [dbo].[BP_5MResult_" + indexCode
-					+ "]  ORDER BY  [时间] DESC ";
-			ResultSet rs = SqlHelper.getResultSet(sql);
-
-			if (rs != null && rs.first()) {
-				arr.add(rs.getString(1));// 时间
-				arr.add(rs.getString(2)); // 金额比
-				arr.add(rs.getString(3)); // 累计金额比
-			}
-		} catch (Exception e) {
-			Log.error("getResult5M", e);
-		}
-
-		return arr;
-	}
-
-	/**
-	 * 取得当日1分钟结果记录数
+	 * @description: 取得当日1分钟结果记录数
+	 * @return
 	 */
 	private static int getResultCount1M() {
 		int count = 0;
-
 		try {
 			String today = DateHelper.now("yyyy-MM-dd");
 			String sql = "SELECT COUNT(1) FROM [dbo].[BP_1MResult_SZ] Where TradeDate = '" + today + "'";
@@ -217,16 +211,15 @@ public class DataSource {
 		} catch (Exception e) {
 			Log.error("getResultCount1M", e);
 		}
-
 		return count;
 	}
 
 	/**
-	 * 取得当日5分钟结果记录数
+	 * @description: 取得当日5分钟结果记录数
+	 * @return
 	 */
 	private static int getResultCount5M() {
 		int count = 0;
-
 		try {
 			String today = DateHelper.now("yyyy-MM-dd");
 			StringBuilder sb = new StringBuilder();
@@ -247,7 +240,6 @@ public class DataSource {
 		} catch (Exception e) {
 			Log.error("getResultCount5M", e);
 		}
-
 		return count;
 	}
 

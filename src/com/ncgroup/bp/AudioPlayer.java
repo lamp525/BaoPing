@@ -15,6 +15,10 @@ public class AudioPlayer {
 
 	private static Player _player;
 
+	/**
+	 * @description: 播放语音文件
+	 * @param fileName
+	 */
 	public static void play(String fileName) {
 		try {
 			InputStream fis = new FileInputStream(fileName);
@@ -25,6 +29,10 @@ public class AudioPlayer {
 		}
 	}
 
+	/**
+	 * @description: 播放提示音
+	 *
+	 */
 	public static void ding() {
 		try {
 			InputStream is = AudioPlayer.class.getClass().getResourceAsStream("/ding.mp3");

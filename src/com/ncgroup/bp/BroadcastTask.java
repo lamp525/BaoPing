@@ -49,14 +49,14 @@ public class BroadcastTask extends TimerTask {
 	}
 
 	/**
-	 * 交易时间节点信息提醒
-	 * 
+	 * @description: 交易时间节点信息提醒
 	 * @param time
 	 */
 	private void notice(String time) {
 		if (!time.equals(_lastTime)) {
 			_lastTime = time;
 			String content = "";
+
 			switch (time) {
 			case "09:15": {
 				content = "集合竞价开始";
@@ -103,9 +103,8 @@ public class BroadcastTask extends TimerTask {
 	}
 
 	/**
-	 * 1分钟量、金额信息播报
-	 * 
-	 * @param time
+	 * @description: 1分钟量、金额信息播报
+	 *
 	 */
 	private void tradeRemind1M() {
 		String time = "";
@@ -149,6 +148,10 @@ public class BroadcastTask extends TimerTask {
 		}
 	}
 
+	/**
+	 * @description: 5分钟量、金额信息播报
+	 *
+	 */
 	private void tradeRemind5M() {
 		String time = "";
 		String contentSZ = "";
@@ -210,6 +213,12 @@ public class BroadcastTask extends TimerTask {
 		}
 	}
 
+	/**
+	 * @description: 设置BigDecimal的精度
+	 * @param val
+	 * @param precision
+	 * @return
+	 */
 	private BigDecimal setBigDecimal(BigDecimal val, int precision) {
 		return val.setScale(precision, BigDecimal.ROUND_HALF_UP);
 	}

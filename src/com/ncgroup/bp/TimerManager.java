@@ -20,6 +20,9 @@ public class TimerManager {
 	private TimerManager() {
 	}
 
+	/**
+	 * @description: 执行模式枚举
+	 */
 	public static enum ExecMode {
 		SERVER, CLIENT, ALL
 	}

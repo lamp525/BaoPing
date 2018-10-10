@@ -29,7 +29,8 @@ public class SqlHelper {
 	public static String password = "Nc@3102";
 
 	/**
-	 * 不允许实例化该类
+	 * @description: 不允许实例化该类
+	 *
 	 */
 	private SqlHelper() {
 	}

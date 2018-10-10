@@ -24,6 +24,10 @@ public final class TimeCalibrate {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @description: 启动时间校准
+	 * @return
+	 */
 	public static boolean run() {
 		boolean ret = false;
 		try {
@@ -50,6 +54,11 @@ public final class TimeCalibrate {
 
 	}
 
+	/**
+	 * @description: 获取校准服务器的网络时间
+	 * @param strUrl
+	 * @return
+	 */
 	public static Date getNetworkTime(String strUrl) {
 		Date date = null;
 		try {

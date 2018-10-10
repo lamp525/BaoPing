@@ -22,7 +22,6 @@ public class ThreadUtil {
 	 * @param ms   （单位毫秒）
 	 * @throws InterruptedException
 	 */
-
 	public static void threadSleep(String name, long ms) throws InterruptedException {
 		Log.info("线程[" + name + "] 将休眠：" + DateHelper.formatTime(ms) + "！");
 		Thread.sleep(ms);

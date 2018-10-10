@@ -23,17 +23,17 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间 （默认格式 "yyyy-MM-dd HH:mm:ss"）
-	 * 
+	 * @description: 获取当前时间 （默认格式 "yyyy-MM-dd HH:mm:ss"）
+	 * @return
 	 */
 	public static String now() {
 		return now("yyyy-MM-dd HH:mm:ss");
 	}
 
 	/**
-	 * 获取当前时间
-	 * 
-	 * @param pattern "yyyy-MM-dd HH:mm:ss"
+	 * @description: 获取当前时间
+	 * @param pattern
+	 * @return
 	 */
 	public static String now(String pattern) {
 		Calendar calendar = Calendar.getInstance();
@@ -41,46 +41,52 @@ public class DateHelper {
 	}
 
 	/**
-	 * 判断当前时间是否为交易日
+	 * @description: 判断当前时间是否为交易日
+	 * @return
 	 */
 	public static Boolean isTradingDay() {
 		int wd = Integer.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
-		if (wd == 6 || wd == 7)
+		if (wd == 1 || wd == 7)
 			return false;
 		else
 			return true;
 	}
 
 	/**
-	 * 获取当前时间的星期
+	 * @description: 获取当前时间的星期
+	 * @return
 	 */
 	public static Integer getWeekDayByCurrentTime() {
 		return Integer.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 	}
 
 	/**
-	 * 获取当前时间的年
+	 * @description: 获取当前时间的年
+	 * @return
 	 */
 	public static Integer getYearByCurrentTime() {
 		return Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 	}
 
 	/**
-	 * 获取当前时间的月
+	 * @description: 获取当前时间的月
+	 * @return
 	 */
 	public static Integer getMonthByCurrentTime() {
 		return Integer.valueOf(Calendar.getInstance().get(Calendar.MONTH)) + 1;
 	}
 
 	/**
-	 * 获取当前时间的日
+	 * @description: 获取当前时间的日
+	 * @return
 	 */
 	public static Integer getDayByCurrentTime() {
 		return Integer.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 	}
 
 	/**
-	 * 获取当前时间的小时
+	 * @description: 获取当前时间的小时
+	 * @return
 	 */
 	public static Integer getHourByCurrentTime() {
 		return Integer.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
@@ -118,7 +124,9 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间之前或之后几年 year
+	 * @description: 获取当前时间之前或之后几年
+	 * @param year
+	 * @return
 	 */
 	public static String getTimeByYear(int year) {
 		Calendar calendar = Calendar.getInstance();
@@ -127,7 +135,9 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间之前或之后几月 month
+	 * @description: 获取当前时间之前或之后几月
+	 * @param month
+	 * @return
 	 */
 	public static String getTimeByMonth(int month) {
 		Calendar calendar = Calendar.getInstance();
@@ -136,7 +146,9 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间之前或之后几天 day
+	 * @description: 获取当前时间之前或之后几天
+	 * @param day
+	 * @return
 	 */
 	public static String getTimeByDay(int day) {
 		Calendar calendar = Calendar.getInstance();
@@ -145,7 +157,9 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间之前或之后几小时 hour
+	 * @description: 获取当前时间之前或之后几小时
+	 * @param hour
+	 * @return
 	 */
 	public static String getTimeByHour(int hour) {
 		Calendar calendar = Calendar.getInstance();
@@ -155,7 +169,11 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间之前或之后几分钟 minute
+	 * @description: 获取当前时间之前或之后几分钟
+	 * @param date
+	 * @param minute
+	 * @param pattern
+	 * @return
 	 */
 	public static String getTimeByMinute(Date date, int minute, String pattern) {
 		if ((pattern == null) || (pattern.length() == 0)) {
@@ -169,7 +187,9 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取当前时间之前或之后几分钟 minute
+	 * @description: 获取当前时间之前或之后几分钟
+	 * @param minute
+	 * @return
 	 */
 	public static String getTimeByMinute(int minute) {
 		Calendar calendar = Calendar.getInstance();
@@ -178,7 +198,10 @@ public class DateHelper {
 	}
 
 	/**
-	 * 获取指定HH:ss时间之前或之后几分钟 minute
+	 * @description: 获取指定HH:ss时间之前或之后几分钟
+	 * @param curTime
+	 * @param minute
+	 * @return
 	 */
 	public static String getTimeByMinute(String curTime, int minute) {
 		if (curTime != null && curTime.length() == 5) {
@@ -193,9 +216,12 @@ public class DateHelper {
 		} else
 			return "";
 	}
-	
+
 	/**
-	 * 获取当前时间之前或之后几秒 second
+	 * @description: 获取当前时间之前或之后几秒
+	 * @param date
+	 * @param second
+	 * @return
 	 */
 	public static Date getTimeBySecond(Date date, int second) {
 		Calendar calendar = Calendar.getInstance();
