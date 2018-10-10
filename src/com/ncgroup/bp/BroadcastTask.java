@@ -99,7 +99,6 @@ public class BroadcastTask extends TimerTask {
 				_speech.play(content);
 			}
 		}
-
 	}
 
 	/**
