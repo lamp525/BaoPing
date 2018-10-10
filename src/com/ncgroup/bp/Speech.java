@@ -84,43 +84,36 @@ public class Speech {
 		@Override
 		public void onBufferProgress(int arg0, int arg1, int arg2, String arg3) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onCompleted(SpeechError arg0) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onEvent(int arg0, int arg1, int arg2, int arg3, Object arg4, Object arg5) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onSpeakBegin() {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onSpeakPaused() {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onSpeakProgress(int arg0, int arg1, int arg2) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onSpeakResumed() {
 			// TODO Auto-generated method stub
-
 		}
 	};
 }
